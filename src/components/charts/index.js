@@ -63,19 +63,17 @@ export function Charts() {
     fetchData();
   }, []);
 
-  console.log("faturas", faturas);
-
   return (
     <div
-      // style={{
-      //   // textAlign: "center",
-      //   backgroundColor: "#324355",
-      //   paddingTop: "40px",
-      //   color: "#F7F7F7",
-      //   fontFamily: "Poppins, sans-serif",
-      //   margin: "0 auto",
-      // }}
-      className="bg-slate-700 min-h-screen relative min-w-min"
+      style={{
+        // textAlign: "center",
+        backgroundColor: "#324355",
+        paddingTop: "24px",
+        color: "#F7F7F7",
+        fontFamily: "Poppins, sans-serif",
+        margin: "0 auto",
+      }}
+      // className="bg-slate-700 min-h-screen relative min-w-min"
     >
       <header className="navbar bg-base-100 p-4 bg-slate-600 text-white flex">
         <Image
@@ -110,7 +108,7 @@ export function Charts() {
             marginTop: "1.5rem",
           }}
         >
-          <MemoizedDoughnutChart dateValue={dateValue} />
+          <MemoizedDoughnutChart faturas={faturas} />
           <MemoizedLineChart dateValue={dateValue} />
         </div>
 
