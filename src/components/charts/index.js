@@ -10,7 +10,7 @@ import PieChartEarnings from "./components/PieChartEarnings";
 import { useMemo, useState, useEffect } from "react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import React from "react";
-import { getFaturasData } from "../../useCases/fetchFaturasUseCase";
+import { getPosicaoData } from "../../useCases/fetchPosicaoUseCase";
 
 // Memoize os componentes de gráficos
 const MemoizedDoughnutChart = React.memo(DoughnutChart);
@@ -48,15 +48,15 @@ export function Charts() {
     []
   );
 
-  const [faturas, setFaturas] = useState([]);
+  const [posicao, setPosicao] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await getFaturasData();
-        setFaturas(data); // Aqui você pode usar os dados das faturas para seus gráficos
+        const data = await getPosicaoData();
+        setPosicao(data); // Aqui você pode usar os dados das posicao para seus gráficos
       } catch (error) {
-        console.error("Erro ao carregar faturas:", error);
+        console.error("Erro ao carregar posicao:", error);
       }
     }
 
@@ -108,7 +108,7 @@ export function Charts() {
             marginTop: "1.5rem",
           }}
         >
-          <MemoizedDoughnutChart faturas={faturas} />
+          <MemoizedDoughnutChart posicao={posicao} />
           <MemoizedLineChart dateValue={dateValue} />
         </div>
 

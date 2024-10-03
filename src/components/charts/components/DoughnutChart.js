@@ -12,8 +12,8 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 
 ChartJS.register(ArcElement, Tooltip, Legend, Filler, ChartDataLabels);
 
-export default function DoughnutChart({ faturas = [] }) {
-  // Garante que faturas seja um array
+export default function DoughnutChart({ posicao = [] }) {
+  // Garante que posicao seja um array
   const [legendPosition, setLegendPosition] = useState("right");
 
   useEffect(() => {
@@ -33,27 +33,30 @@ export default function DoughnutChart({ faturas = [] }) {
     };
   }, []);
 
-  // Verifica se faturas está definido e se é um array
-  if (!faturas || faturas.length === 0) {
-    return <p>Nenhuma fatura disponível para exibir o gráfico.</p>;
+  // Verifica se posicao está definido e se é um array
+  if (!posicao || posicao.length === 0) {
+    return <p>Nenhuma posição disponível para exibir o gráfico.</p>;
   }
 
-  // Agrupa as faturas por "Parcela" e soma os valores
-  const parcelas = faturas.reduce((acc, fatura) => {
-    const parcela = fatura.Parcela;
-    const valor = parseFloat(fatura.Valor.replace("R$", "").replace(",", "."));
+  // Agrupa as posicao por "Parcela" e soma os valores
+  const strategies = posicao.reduce((acc, posicao) => {
+    const strategy = posicao.strategy;
+    // const valor = parseFloat(
+    //   posicao.closing_value.replace("R$", "").replace(",", ".")
+    // );
+    const valor = posicao.closing_value;
 
-    if (acc[parcela]) {
-      acc[parcela] += valor;
+    if (acc[strategy]) {
+      acc[strategy] += valor;
     } else {
-      acc[parcela] = valor;
+      acc[strategy] = valor;
     }
 
     return acc;
   }, {});
 
-  const labels = Object.keys(parcelas);
-  const dataValues = Object.values(parcelas);
+  const labels = Object.keys(strategies);
+  const dataValues = Object.values(strategies);
 
   const options = {
     responsive: true,
@@ -103,7 +106,7 @@ export default function DoughnutChart({ faturas = [] }) {
 
   return (
     <TitleCard
-      title={"Alocação por Parcela"}
+      title={"Alocação por Estratégia"}
       className="bg-slate-600 text-white"
     >
       <div
