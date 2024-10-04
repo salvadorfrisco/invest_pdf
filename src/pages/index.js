@@ -29,8 +29,10 @@ export default function Home() {
       <main
         style={{
           textAlign: "center",
-          backgroundColor: "#223345",
-          fontSize: "27px",
+          // backgroundColor: "#555",
+          fontSize: "60px",
+          width: "2480px",
+          height: "3500px",
         }}
       >
         <button
@@ -39,7 +41,15 @@ export default function Home() {
           Gerar PDF
         </button>
 
-        <div id="conteudo">
+        <div
+          id="conteudo"
+          style={{
+            width: "2480px",
+            height: "3506px",
+            padding: "42px",
+            backgroundColor: "#222",
+          }}
+        >
           {/* <h1 style={{ textAlign: "center", color: "#f00", fontSize: "27px;" }}>
             Conteúdo do PDF 2
           </h1> */}

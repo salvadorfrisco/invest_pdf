@@ -13,8 +13,6 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 ChartJS.register(ArcElement, Tooltip, Legend, Filler, ChartDataLabels);
 
 export default function DoughnutChart({ posicao = [] }) {
-  const [legendPosition, setLegendPosition] = useState("right");
-
   // Verifica se posicao está definido e se é um array
   if (!posicao || posicao.length === 0) {
     return <p>Nenhuma posição disponível para exibir o gráfico.</p>;
@@ -43,28 +41,34 @@ export default function DoughnutChart({ posicao = [] }) {
   // Cria labels com estratégia e valor percentual
   const percentageLabels = labels.map((label, index) => {
     const percentage = (dataValues[index] / totalValue) * 100;
-    return `${label.toUpperCase()}\n${percentage.toFixed(2)}%`; // Adiciona a quebra de linha
+    return `${percentage.toFixed(2)}%`; // Adiciona a quebra de linha
   });
 
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        display: false, // Esconde as legendas
+        position: "right",
+        labels: {
+          color: "white",
+          font: {
+            size: 40, // Define o tamanho da fonte das legendas
+          },
+        },
       },
       datalabels: {
         color: "white",
         font: {
-          size: 16,
+          size: 28,
         },
         formatter: (value, context) => {
           const index = context.dataIndex; // Obtém o índice do item
           const label = percentageLabels[index]; // Pega o label percentual correspondente
           return value > 0 ? label : ""; // Retorna o label formatado
         },
-        anchor: "end", // Posiciona o anchor fora do gráfico
+        anchor: "center", // Posiciona o anchor fora do gráfico
         align: "end", // Alinha os labels ao centro
-        offset: 10, // Ajuste maior para garantir que o label fique distante do gráfico
+        offset: 116, // Ajuste maior para garantir que o label fique distante do gráfico
         clip: false, // Evita o corte dos labels
       },
     },
@@ -81,10 +85,10 @@ export default function DoughnutChart({ posicao = [] }) {
   };
 
   const data = {
-    labels: percentageLabels, // Usa os labels com percentual
+    labels: labels, // Usa os labels com percentual
     datasets: [
       {
-        label: "%",
+        label: "$",
         data: dataValues,
         backgroundColor: [
           "rgba(175, 192, 192, 0.8)",
@@ -111,9 +115,10 @@ export default function DoughnutChart({ posicao = [] }) {
   return (
     <div
       style={{
-        height: "500px", // Aumente a altura para dar mais espaço ao gráfico
-        width: "100%",
-        position: "relative", // Certifique-se de que o gráfico se ajuste ao container
+        height: "1000px", // Aumente a altura para dar mais espaço ao gráfico
+        width: "1480px",
+        position: "relative",
+        alignContent: "start", // Certifique-se de que o gráfico se ajuste ao container
       }}
     >
       <Doughnut options={options} data={data} />

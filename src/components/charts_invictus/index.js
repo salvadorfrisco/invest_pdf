@@ -33,7 +33,9 @@ export function ChartsInvictus() {
 
   const formattedTotalCustodia = `$${totalCustodia.toLocaleString("en-US", {
     style: "decimal",
-  })}`; // Remove space between dollar sign and number
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
 
   const posicaoAgrupada = useMemo(() => {
     return posicao.reduce((acc, item) => {
@@ -59,216 +61,230 @@ export function ChartsInvictus() {
 
   const posicaoAgrupadaArray = Object.values(posicaoAgrupada);
 
-  console.log(posicao);
-
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
+    <div
+      style={{
+        display: "flex",
+        height: "3420px",
+        flexDirection: "column",
+        border: "8px solid white", // Moldura branca
+        position: "relative", // Para permitir a posição dos desenhos nos cantos
+      }}
+    >
       <div
         style={{
-          width: "100%",
-          marginTop: "2rem",
-          backgroundColor: "#154399",
-          padding: "2rem",
-          overflow: "hidden",
+          position: "absolute", // Desenho no canto superior direito
+          top: 0,
+          right: 0,
+          width: "100px",
+          height: "100px",
         }}
       >
-        <span
+        <Image
+          src="/desenho_superior_direito.svg" // Substitua com o caminho do seu SVG
+          alt="Desenho Superior Direito"
+          width={100}
+          height={100}
+        />
+      </div>
+
+      <div
+        style={{
+          position: "absolute", // Desenho no canto inferior esquerdo
+          bottom: 0,
+          left: 0,
+          width: "100px",
+          height: "100px",
+        }}
+      >
+        <Image
+          src="/desenho_inferior_esquerdo.svg" // Substitua com o caminho do seu SVG
+          alt="Desenho Inferior Esquerdo"
+          width={100}
+          height={100}
+        />
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div
           style={{
-            fontSize: "40px",
+            width: "2480px",
+            height: "100px",
+            alignContent: "center",
+            fontSize: "80px",
             fontWeight: "bold",
+            marginTop: "160px",
           }}
         >
           PERFORMANCE MENSAL
-        </span>
-        <br />
-        <span
-          style={{
-            backgroundColor: "#154399",
-            color: "#fff",
-            border: "2px solid #fff",
-            borderRadius: "32px",
-            padding: "0.5rem 1rem",
-            display: "inline-block",
-            fontSize: "20px",
-            fontWeight: "bold",
-          }}
-        >
-          &nbsp;&nbsp;AGOSTO 2024&nbsp;&nbsp;
-        </span>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          backgroundColor: "#FF0000",
-          color: "#F7F7F7",
-          fontFamily: "Poppins, sans-serif",
-          height: "100vh",
-        }}
-      >
-        <div
-          style={{
-            alignContent: "center",
-            width: "40%",
-            backgroundColor: "#159399",
-            padding: "2rem",
-            overflow: "hidden",
-          }}
-        >
-          {/* Contêiner flex para alinhar o SVG e o texto em linha */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row", // Coloca o SVG e o texto em linha
-              alignItems: "center", // Centraliza verticalmente
-              gap: "10px", // Espaçamento entre o SVG e o texto
-            }}
-          >
-            <Image
-              src="/icone_invest.svg" // Caminho para o SVG
-              alt="Icone Invest"
-              width={120}
-              height={120}
-            />
-            {/* Contêiner em coluna para o texto "CUSTÓDIA TOTAL" e o valor */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column", // Coloca o texto e o valor em coluna
-                justifyContent: "center", // Centraliza verticalmente
-              }}
-            >
-              <span
-                style={{
-                  fontSize: "24px",
-                }}
-              >
-                CUSTÓDIA TOTAL
-              </span>
-              <span
-                style={{
-                  fontSize: "32px",
-                  fontWeight: "bold",
-                }}
-              >
-                {formattedTotalCustodia}
-              </span>
-            </div>
-          </div>
         </div>
-        <div
-          style={{
-            width: "60%",
-            backgroundColor: "#000",
-            alignContent: "center",
-            padding: "2rem",
-            overflow: "hidden",
-          }}
-        >
-          <MemoizedDoughnutChart posicao={posicao} />
-        </div>
-      </div>
-
-      <div
-        style={{
-          width: "100%",
-          marginTop: "2rem",
-          backgroundColor: "#000",
-          padding: "2rem",
-          overflow: "hidden",
-        }}
-      >
         <div
           style={{
             display: "flex",
-            justifyContent: "center", // Centraliza o conteúdo horizontalmente
-            alignItems: "baseline", // Alinha pelo baseline
-            marginBottom: "2rem", // Margem inferior para separação
-          }}
-        >
-          {/* Logo à esquerda */}
-          <div style={{ marginRight: "auto" }}>
-            {" "}
-            {/* Empurra o logo à esquerda */}
-            <Image
-              src="/logo_xp.svg" // Caminho para o SVG
-              alt="Logo XP"
-              width={120}
-              height={120}
-            />
-          </div>
-
-          {/* Texto centralizado */}
-          <span
-            style={{
-              fontSize: "40px",
-              fontWeight: "bold",
-              marginLeft: "auto", // Empurra o texto ao centro
-            }}
-          >
-            DEMONSTRATIVO
-          </span>
-        </div>
-        <br />
-        <div
-          style={{
-            backgroundColor: "#154399",
-            color: "#fff",
-            border: "2px solid #fff",
-            borderRadius: "32px",
-            padding: "0.5rem 1rem",
-            display: "inline-block",
-            fontSize: "20px",
+            width: "2480px",
+            height: "160px",
+            alignContent: "center",
+            justifyContent: "center",
+            fontSize: "60px",
             fontWeight: "bold",
           }}
         >
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead>
-              <tr>
-                <th style={{ border: "1px solid #fff", padding: "8px" }}>
-                  Produto
-                </th>
-                <th style={{ border: "1px solid #fff", padding: "8px" }}>
-                  Asset
-                </th>
-                <th style={{ border: "1px solid #fff", padding: "8px" }}>
-                  Quantidade
-                </th>
-                <th style={{ border: "1px solid #fff", padding: "8px" }}>
-                  Valor
-                </th>
-                <th style={{ border: "1px solid #fff", padding: "8px" }}>
-                  Competência
-                </th>
-                <th style={{ border: "1px solid #fff", padding: "8px" }}>
-                  Estratégia
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {posicaoAgrupadaArray.map((item, index) => (
-                <tr key={index}>
-                  <td style={{ border: "1px solid #fff", padding: "8px" }}>
-                    {item.produto}
-                  </td>
-                  <td style={{ border: "1px solid #fff", padding: "8px" }}>
-                    {item.asset}
-                  </td>
-                  <td style={{ border: "1px solid #fff", padding: "8px" }}>
-                    {item.closing_quantity}
-                  </td>
-                  <td style={{ border: "1px solid #fff", padding: "8px" }}>
-                    {item.closing_value}
-                  </td>
-                  <td style={{ border: "1px solid #fff", padding: "8px" }}>
-                    {item.competencia}
-                  </td>
-                  <td style={{ border: "1px solid #fff", padding: "8px" }}>
-                    {item.strategy}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          AGOSTO 2024
+        </div>
+        <div
+          style={{
+            display: "flex",
+          }}
+        >
+          <div
+            style={{
+              width: "940px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "10px",
+                height: "1000px",
+              }}
+            >
+              <div
+                style={{
+                  height: "400px",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <Image
+                  src="/icone_invest.svg" // Caminho para o SVG
+                  alt="Icone Invest"
+                  width={240}
+                  height={200}
+                />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  height: "400px",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: "40px",
+                  }}
+                >
+                  CUSTÓDIA TOTAL
+                </span>
+                <span
+                  style={{
+                    fontSize: "64px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {formattedTotalCustodia}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              alignContent: "center",
+              overflow: "hidden",
+              width: "1620px",
+              height: "1100px",
+            }}
+          >
+            <MemoizedDoughnutChart posicao={posicao} />
+          </div>
+        </div>
+
+        <div
+          style={{
+            width: "100%",
+            height: "1820px",
+            marginTop: "2rem",
+            padding: "2rem",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between", // Centraliza o conteúdo horizontalmente
+              alignItems: "baseline",
+              margin: "0 50px 20px 50px",
+            }}
+          >
+            {/* Logo à esquerda */}
+            <div style={{ marginLeft: "80px" }}>
+              {/* Empurra o logo à esquerda */}
+              <Image
+                src="/logo_xp.svg" // Caminho para o SVG
+                alt="Logo XP"
+                width={220}
+                height={220}
+              />
+            </div>
+
+            <span
+              style={{
+                fontSize: "80px",
+                fontWeight: "bold",
+              }}
+            >
+              DEMONSTRATIVO
+            </span>
+            <span></span>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontFamily: "Poppins, sans-serif",
+              height: "1600px",
+              fontSize: "40px",
+              margin: "0px 60px 4px 120px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                fontSize: "46px",
+                textAlign: "left",
+                fontWeight: "bold",
+              }}
+            >
+              <div style={{ flex: 2, padding: "8px" }}>PRODUTO</div>
+              <div style={{ flex: 1, padding: "8px" }}>QUANTIDADE</div>
+              <div style={{ flex: 1, padding: "8px" }}>VALOR</div>
+              {/* <div style={{ flex: 1, padding: "8px" }}>COMPETÊNCIA</div> */}
+              <div style={{ flex: 1, padding: "8px" }}>ATIVO</div>
+            </div>
+            {posicao.map((item, index) => (
+              <div key={index} style={{ display: "flex", textAlign: "left" }}>
+                <div style={{ flex: 2, padding: "8px" }}>{item.asset}</div>
+                <div style={{ flex: 1, padding: "8px" }}>
+                  {item.closing_quantity.toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </div>
+                <div style={{ flex: 1, padding: "8px" }}>
+                  {item.closing_value.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </div>
+                {/* <div style={{ flex: 1, padding: "8px" }}>{item.competencia}</div> */}
+                <div style={{ flex: 1, padding: "8px" }}>{item.strategy}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
