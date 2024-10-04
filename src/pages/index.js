@@ -1,6 +1,6 @@
 import Head from "next/head";
 import generatePDF, { Margin } from "react-to-pdf";
-import { Charts } from "../components/charts";
+import { ChartsInvictus } from "../components/charts_invictus";
 
 const personalizacao = {
   // Baixar/Salvar = save / Abrir no navegador = open
@@ -45,7 +45,7 @@ export default function Home() {
           </h1> */}
 
           {/* <div> */}
-          <Charts />
+          <ChartsInvictus />
           {/* </div> */}
         </div>
       </main>
