@@ -3,10 +3,14 @@ import generatePDF, { Margin } from "react-to-pdf";
 import { ChartsInvictus } from "../components/charts_invictus";
 
 const personalizacao = {
+  // Baixar/Salvar = save / Abrir no navegador = open
   method: "open",
   page: {
+    // Definir a margem: NONE, SMALL, MEDIUM, etc...
     margin: Margin.NONE,
+    // Formato da página: A4 ou letter
     format: "A4",
+    // Orientação do arquivo: portrait ou landscape
     orientation: "portrait",
   },
 };
@@ -27,7 +31,6 @@ export default function Home() {
           textAlign: "center",
           fontSize: "60px",
           width: "2480px",
-          height: "3500px",
         }}
       >
         <button
@@ -40,48 +43,20 @@ export default function Home() {
           id="conteudo"
           style={{
             width: "2480px",
-            minHeight: "3506px",
+            height: "3504px",
+            height: "7012px",
             padding: "60px 52px",
             backgroundColor: "#111E25",
-            position: "relative", // Para o cabeçalho e rodapé
           }}
         >
-          {/* Cabeçalho */}
+          <ChartsInvictus />
           <div
             style={{
-              position: "absolute",
-              top: "20px",
-              width: "100%",
-              textAlign: "center",
+              height: "126px",
+              width: "2480px",
             }}
-          >
-            <img
-              src="/logo_invictus.png"
-              alt="Logotipo Invictus"
-              style={{ width: "300px" }}
-            />
-          </div>
-
-          {/* Conteúdo */}
-          <div style={{ marginTop: "150px" }}>
-            <ChartsInvictus />
-          </div>
-
-          {/* Rodapé */}
-          <div
-            style={{
-              position: "absolute",
-              bottom: "20px",
-              width: "100%",
-              textAlign: "center",
-            }}
-          >
-            <img
-              src="/rodape_invictus.png"
-              alt="Rodapé Invictus"
-              style={{ width: "300px" }}
-            />
-          </div>
+          ></div>
+          <ChartsInvictus />
         </div>
       </main>
     </>

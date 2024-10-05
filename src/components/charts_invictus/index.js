@@ -164,6 +164,22 @@ export function ChartsInvictus() {
         />
       </div>
 
+      <div
+        style={{
+          position: "absolute", // Desenho no canto inferior direito
+          bottom: 60,
+          right: 100,
+          zIndex: 9999, // Alta prioridade para sobrepor tudo, inclusive a borda
+        }}
+      >
+        <Image
+          src="/logo-psr-invest-light-transp.png" // Substitua com o caminho do seu png
+          alt="Logo PSR"
+          width={358}
+          height={93}
+        />
+      </div>
+
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div
           style={{
@@ -260,7 +276,6 @@ export function ChartsInvictus() {
               overflow: "hidden",
               width: "1620px",
               height: "1100px",
-              backgroundColor: "#F00",
             }}
           >
             <MemoizedDoughnutChart posicao={posicao} />
@@ -271,7 +286,7 @@ export function ChartsInvictus() {
           style={{
             width: "100%",
             height: "1820px",
-            padding: "4rem",
+            padding: "0 4rem",
             overflow: "hidden",
           }}
         >
@@ -281,7 +296,6 @@ export function ChartsInvictus() {
               justifyContent: "space-between", // Centraliza o conteúdo horizontalmente
               alignItems: "baseline",
               margin: "0 50px 20px 50px",
-              backgroundColor: "#FF0",
             }}
           >
             {/* Logo à esquerda */}
@@ -331,25 +345,35 @@ export function ChartsInvictus() {
               {/* <div style={{ flex: 1, padding: "8px" }}>COMPETÊNCIA</div> */}
               <div style={{ flex: 1, padding: "8px" }}>ATIVO</div>
             </div>
-            {posicao.map((item, index) => (
-              <div key={index} style={{ display: "flex", textAlign: "left" }}>
-                <div style={{ flex: 2, padding: "8px" }}>{item.asset}</div>
-                <div style={{ flex: 1, padding: "8px" }}>
-                  {item.closing_quantity.toLocaleString("pt-BR", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </div>
-                <div style={{ flex: 1, padding: "8px" }}>
-                  {item.closing_value.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
-                </div>
-                {/* <div style={{ flex: 1, padding: "8px" }}>{item.competencia}</div> */}
-                <div style={{ flex: 1, padding: "8px" }}>{item.strategy}</div>
-              </div>
-            ))}
+            {posicao.map((item, index) => {
+              console.log(index);
+              return (
+                index < 9 && <div className="page-break" /> && (
+                  <div
+                    key={index}
+                    style={{ display: "flex", textAlign: "left" }}
+                  >
+                    <div style={{ flex: 2, padding: "8px" }}>{item.asset}</div>
+                    <div style={{ flex: 1, padding: "8px" }}>
+                      {item.closing_quantity.toLocaleString("pt-BR", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </div>
+                    <div style={{ flex: 1, padding: "8px" }}>
+                      {item.closing_value.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })}
+                    </div>
+                    {/* <div style={{ flex: 1, padding: "8px" }}>{item.competencia}</div> */}
+                    <div style={{ flex: 1, padding: "8px" }}>
+                      {item.strategy}
+                    </div>
+                  </div>
+                )
+              );
+            })}
           </div>
         </div>
       </div>
