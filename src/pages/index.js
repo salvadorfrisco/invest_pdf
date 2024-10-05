@@ -3,14 +3,10 @@ import generatePDF, { Margin } from "react-to-pdf";
 import { ChartsInvictus } from "../components/charts_invictus";
 
 const personalizacao = {
-  // Baixar/Salvar = save / Abrir no navegador = open
   method: "open",
   page: {
-    // Definir a margem: NONE, SMALL, MEDIUM, etc...
     margin: Margin.NONE,
-    // Formato da página: A4 ou letter
     format: "A4",
-    // Orientação do arquivo: portrait ou landscape
     orientation: "portrait",
   },
 };
@@ -29,7 +25,6 @@ export default function Home() {
       <main
         style={{
           textAlign: "center",
-          // backgroundColor: "#555",
           fontSize: "60px",
           width: "2480px",
           height: "3500px",
@@ -45,18 +40,48 @@ export default function Home() {
           id="conteudo"
           style={{
             width: "2480px",
-            height: "3506px",
-            padding: "42px",
-            backgroundColor: "#222",
+            minHeight: "3506px",
+            padding: "60px 52px",
+            backgroundColor: "#111E25",
+            position: "relative", // Para o cabeçalho e rodapé
           }}
         >
-          {/* <h1 style={{ textAlign: "center", color: "#f00", fontSize: "27px;" }}>
-            Conteúdo do PDF 2
-          </h1> */}
+          {/* Cabeçalho */}
+          <div
+            style={{
+              position: "absolute",
+              top: "20px",
+              width: "100%",
+              textAlign: "center",
+            }}
+          >
+            <img
+              src="/logo_invictus.png"
+              alt="Logotipo Invictus"
+              style={{ width: "300px" }}
+            />
+          </div>
 
-          {/* <div> */}
-          <ChartsInvictus />
-          {/* </div> */}
+          {/* Conteúdo */}
+          <div style={{ marginTop: "150px" }}>
+            <ChartsInvictus />
+          </div>
+
+          {/* Rodapé */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "20px",
+              width: "100%",
+              textAlign: "center",
+            }}
+          >
+            <img
+              src="/rodape_invictus.png"
+              alt="Rodapé Invictus"
+              style={{ width: "300px" }}
+            />
+          </div>
         </div>
       </main>
     </>

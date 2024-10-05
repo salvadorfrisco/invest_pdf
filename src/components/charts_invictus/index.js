@@ -65,55 +65,116 @@ export function ChartsInvictus() {
     <div
       style={{
         display: "flex",
-        height: "3420px",
+        height: "3380px",
         flexDirection: "column",
-        border: "8px solid white", // Moldura branca
         position: "relative", // Para permitir a posição dos desenhos nos cantos
+        zIndex: 1, // Garante que a borda tenha menor prioridade que a imagem
       }}
     >
+      {/* Logotipo no centro superior */}
       <div
         style={{
-          position: "absolute", // Desenho no canto superior direito
-          top: 0,
-          right: 0,
-          width: "100px",
-          height: "100px",
+          position: "absolute",
+          backgroundColor: "#FFF",
+          top: "80px", // Posição no topo da página
+          left: "50%", // Centraliza horizontalmente
+          transform: "translateX(-50%)", // Move o logotipo para o centro exato
+          zIndex: 1000, // Alta prioridade para ficar acima de outros elementos
         }}
       >
         <Image
-          src="/desenho_superior_direito.svg" // Substitua com o caminho do seu SVG
-          alt="Desenho Superior Direito"
-          width={100}
-          height={100}
+          src="/logo_invictus.png" // Caminho para o logotipo
+          alt="Logotipo Invictus"
+          width={580}
+          height={400}
+        />
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: -20,
+          width: "79.4%", // A borda superior se estende por 60% da largura
+          height: "4px", // A altura da borda superior
+          backgroundColor: "white", // Cor da borda superior
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: -20,
+          left: 0,
+          width: "4px", // A largura da borda esquerda
+          height: "86%", // A borda esquerda se estende por 80% da altura
+          backgroundColor: "white", // Cor da borda esquerda
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          bottom: -20,
+          right: 0,
+          width: "4px", // A largura da borda esquerda
+          height: "86%", // A borda esquerda se estende por 80% da altura
+          backgroundColor: "white", // Cor da borda esquerda
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          right: -20,
+          width: "79.4%", // A borda superior se estende por 60% da largura
+          height: "4px", // A altura da borda superior
+          backgroundColor: "white", // Cor da borda superior
+        }}
+      />
+      {/* Imagem no canto superior direito */}
+      <div
+        style={{
+          position: "absolute",
+          top: -60,
+          right: -52,
+          zIndex: 9999,
+          backgroundColor: "#FFF", // Alta prioridade para sobrepor tudo, inclusive a borda
+        }}
+      >
+        <Image
+          src="/borda_superior_direito.png" // Substitua com o caminho do seu png
+          alt="Desenho moldura superior"
+          width={500}
+          height={500}
         />
       </div>
 
       <div
         style={{
           position: "absolute", // Desenho no canto inferior esquerdo
-          bottom: 0,
-          left: 0,
-          width: "100px",
-          height: "100px",
+          bottom: -62,
+          left: -60,
+          zIndex: 9999,
+          backgroundColor: "#FFF", // Alta prioridade para sobrepor tudo, inclusive a borda
         }}
       >
         <Image
-          src="/desenho_inferior_esquerdo.svg" // Substitua com o caminho do seu SVG
-          alt="Desenho Inferior Esquerdo"
-          width={100}
-          height={100}
+          src="/borda_inferior_esquerda.png" // Substitua com o caminho do seu png
+          alt="Desenho moldura inferior"
+          width={500}
+          height={500}
         />
       </div>
 
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div
           style={{
-            width: "2480px",
-            height: "100px",
-            alignContent: "center",
-            fontSize: "80px",
+            width: "100%",
+            height: "500px",
+            alignContent: "end",
+            fontSize: "96px",
             fontWeight: "bold",
+            color: "#CACACA",
             marginTop: "160px",
+            lineHeight: "0.96",
           }}
         >
           PERFORMANCE MENSAL
@@ -121,12 +182,14 @@ export function ChartsInvictus() {
         <div
           style={{
             display: "flex",
-            width: "2480px",
+            width: "100%",
             height: "160px",
             alignContent: "center",
             justifyContent: "center",
-            fontSize: "60px",
+            color: "#CACAFF",
+            fontSize: "48px",
             fontWeight: "bold",
+            marginTop: "16px",
           }}
         >
           AGOSTO 2024
@@ -138,7 +201,7 @@ export function ChartsInvictus() {
         >
           <div
             style={{
-              width: "940px",
+              width: "900px",
             }}
           >
             <div
@@ -147,7 +210,8 @@ export function ChartsInvictus() {
                 justifyContent: "center",
                 alignItems: "center",
                 gap: "10px",
-                height: "1000px",
+                height: "1100px",
+                // backgroundColor: "#FFF",
               }}
             >
               <div
@@ -158,7 +222,7 @@ export function ChartsInvictus() {
                 }}
               >
                 <Image
-                  src="/icone_invest.svg" // Caminho para o SVG
+                  src="/icone_mao_dinheiro.png"
                   alt="Icone Invest"
                   width={240}
                   height={200}
@@ -196,6 +260,7 @@ export function ChartsInvictus() {
               overflow: "hidden",
               width: "1620px",
               height: "1100px",
+              backgroundColor: "#F00",
             }}
           >
             <MemoizedDoughnutChart posicao={posicao} />
@@ -206,8 +271,7 @@ export function ChartsInvictus() {
           style={{
             width: "100%",
             height: "1820px",
-            marginTop: "2rem",
-            padding: "2rem",
+            padding: "4rem",
             overflow: "hidden",
           }}
         >
@@ -217,13 +281,14 @@ export function ChartsInvictus() {
               justifyContent: "space-between", // Centraliza o conteúdo horizontalmente
               alignItems: "baseline",
               margin: "0 50px 20px 50px",
+              backgroundColor: "#FF0",
             }}
           >
             {/* Logo à esquerda */}
             <div style={{ marginLeft: "80px" }}>
               {/* Empurra o logo à esquerda */}
               <Image
-                src="/logo_xp.svg" // Caminho para o SVG
+                src="/logo_xp.png"
                 alt="Logo XP"
                 width={220}
                 height={220}
@@ -234,6 +299,7 @@ export function ChartsInvictus() {
               style={{
                 fontSize: "80px",
                 fontWeight: "bold",
+                color: "#CACACA",
               }}
             >
               DEMONSTRATIVO
