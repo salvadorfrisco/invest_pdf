@@ -173,7 +173,7 @@ export function ChartsInvictus() {
         }}
       >
         <Image
-          src="/logo-psr-invest-light-transp.png" // Substitua com o caminho do seu png
+          src="/logo-psr-tech-light-transp.png" // Substitua com o caminho do seu png
           alt="Logo PSR"
           width={358}
           height={93}
@@ -311,9 +311,10 @@ export function ChartsInvictus() {
 
             <span
               style={{
-                fontSize: "80px",
+                fontSize: "64px",
                 fontWeight: "bold",
-                color: "#CACACA",
+                color: "#BABABA",
+                padding: "0 300px 10px 0",
               }}
             >
               DEMONSTRATIVO
@@ -346,7 +347,6 @@ export function ChartsInvictus() {
               <div style={{ flex: 1, padding: "8px" }}>ATIVO</div>
             </div>
             {posicao.map((item, index) => {
-              console.log(index);
               return (
                 index < 9 && <div className="page-break" /> && (
                   <div

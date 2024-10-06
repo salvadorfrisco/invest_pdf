@@ -44,19 +44,19 @@ export default function Home() {
           style={{
             width: "2480px",
             height: "3504px",
-            height: "7012px",
+            // height: "7008px",
             padding: "60px 52px",
             backgroundColor: "#111E25",
           }}
         >
           <ChartsInvictus />
-          <div
+          {/* <div
             style={{
               height: "126px",
               width: "2480px",
             }}
           ></div>
-          <ChartsInvictus />
+          <ChartsInvictus /> */}
         </div>
       </main>
     </>
