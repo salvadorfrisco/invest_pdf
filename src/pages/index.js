@@ -17,6 +17,16 @@ const personalizacao = {
 
 const recuperarConteudoParaPDF = () => document.getElementById("conteudo");
 
+const factor = 3;
+const widthPage = 2480 / factor;
+const heightPage = 3506 / factor;
+const fontSizeXl = 80 / factor;
+const fontSizeLg = 60 / factor;
+const fontSizeMd = 40 / factor;
+const fontSizeSm = 30 / factor;
+const fontSizeXs = 20 / factor;
+const rem = 8 / factor;
+
 export default function Home() {
   return (
     <>
@@ -29,8 +39,8 @@ export default function Home() {
       <main
         style={{
           textAlign: "center",
-          fontSize: "60px",
-          width: "2480px",
+          fontSize: `${fontSizeLg}px`,
+          width: `${widthPage}px`,
         }}
       >
         <button
@@ -42,10 +52,10 @@ export default function Home() {
         <div
           id="conteudo"
           style={{
-            width: "2480px",
-            height: "3504px",
+            width: `${widthPage}px`,
+            height: `${heightPage}px`,
             // height: "7008px",
-            padding: "60px 52px",
+            padding: `${8 * rem}px ${7 * rem}px`, // "60px 52px",
             backgroundColor: "#111E25",
           }}
         >

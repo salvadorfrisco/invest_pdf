@@ -41,7 +41,7 @@ export default function DoughnutChart({ posicao = [] }) {
   // Cria labels com estratégia e valor percentual
   const percentageLabels = labels.map((label, index) => {
     const percentage = (dataValues[index] / totalValue) * 100;
-    return `${percentage.toFixed(2)}%`; // Adiciona a quebra de linha
+    return `${percentage.toFixed(1)}%`; // Adiciona a quebra de linha
   });
 
   const options = {
@@ -52,14 +52,15 @@ export default function DoughnutChart({ posicao = [] }) {
         labels: {
           color: "white",
           font: {
-            size: 40, // Define o tamanho da fonte das legendas
+            size: 12, // Define o tamanho da fonte das legendas
           },
         },
+        fullSize: false,
       },
       datalabels: {
         color: "white",
         font: {
-          size: 28,
+          size: 11,
         },
         formatter: (value, context) => {
           const index = context.dataIndex; // Obtém o índice do item
@@ -68,20 +69,21 @@ export default function DoughnutChart({ posicao = [] }) {
         },
         anchor: "center", // Posiciona o anchor fora do gráfico
         align: "end", // Alinha os labels ao centro
-        offset: 116, // Ajuste maior para garantir que o label fique distante do gráfico
+        offset: 0, // Ajuste maior para garantir que o label fique distante do gráfico
         clip: false, // Evita o corte dos labels
       },
     },
     maintainAspectRatio: false, // Permite ajustar a altura e largura livremente
     layout: {
       padding: {
-        top: 50, // Aumenta o espaçamento superior para evitar o corte
+        top: 0, // Aumenta o espaçamento superior para evitar o corte
         bottom: 20, // Aumenta o espaçamento inferior
-        left: 20,
-        right: 20,
+        left: 10,
+        right: 0,
       },
     },
-    aspectRatio: 1, // Define uma proporção de aspecto (pode ajustar conforme o necessário)
+    aspectRatio: 2, // Define uma proporção de aspecto (pode ajustar conforme o necessário)
+    cutout: "65%", // Define a espessura do donut (aumente o valor para deixar o donut mais fino)
   };
 
   const data = {
@@ -91,22 +93,22 @@ export default function DoughnutChart({ posicao = [] }) {
         label: "$",
         data: dataValues,
         backgroundColor: [
-          "rgba(175, 192, 192, 0.8)",
+          "rgba(195, 192, 192, 0.8)",
           "rgba(74, 92, 195, 0.8)",
           "rgba(112, 112, 92, 0.8)",
-          "rgba(255, 206, 155, 0.8)",
+          "rgba(95, 186, 5, 0.8)",
           "rgba(75, 192, 192, 0.8)",
           "rgba(175, 12, 12, 0.8)",
         ],
         borderColor: [
-          "rgba(175, 192, 192, 1)",
+          "rgba(195, 192, 192, 1)",
           "rgba(74, 92, 195, 1)",
           "rgba(112, 112, 92, 1)",
-          "rgba(255, 206, 155, 1)",
+          "rgba(95, 186, 5, 1)",
           "rgba(75, 192, 192, 1)",
           "rgba(175, 12, 12, 1)",
         ],
-        borderWidth: 2,
+        borderWidth: 1,
         hoverOffset: 2,
       },
     ],
@@ -115,8 +117,8 @@ export default function DoughnutChart({ posicao = [] }) {
   return (
     <div
       style={{
-        height: "1000px", // Aumente a altura para dar mais espaço ao gráfico
-        width: "1480px",
+        height: "290px", // Aumente a altura para dar mais espaço ao gráfico
+        width: "480px",
         position: "relative",
         alignContent: "start", // Certifique-se de que o gráfico se ajuste ao container
       }}

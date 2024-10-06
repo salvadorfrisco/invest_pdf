@@ -8,6 +8,18 @@ import Image from "next/image"; // Import the Image component
 
 const MemoizedDoughnutChart = React.memo(DoughnutChart);
 
+const factor = 3;
+const widthPage = 2480 / factor;
+const heightPage = 3506 / factor;
+const fontSizeXl = 80 / factor;
+const fontSizeLg = 60 / factor;
+const fontSizeMd = 40 / factor;
+const fontSizeSm = 30 / factor;
+const fontSizeXs = 20 / factor;
+const rem = 8 / factor;
+const borderWidth = 1;
+const borderHeight = rem / 4 / factor;
+
 export function ChartsInvictus() {
   const [posicao, setPosicao] = useState([]);
 
@@ -65,118 +77,118 @@ export function ChartsInvictus() {
     <div
       style={{
         display: "flex",
-        height: "3380px",
+        height: `${heightPage - 16 * rem}px`, // "3380px",
         flexDirection: "column",
         position: "relative", // Para permitir a posição dos desenhos nos cantos
         zIndex: 1, // Garante que a borda tenha menor prioridade que a imagem
       }}
     >
-      {/* Logotipo no centro superior */}
+      {/* Logotipo */}
       <div
         style={{
           position: "absolute",
           backgroundColor: "#FFF",
-          top: "80px", // Posição no topo da página
+          top: "24px",
           left: "50%", // Centraliza horizontalmente
           transform: "translateX(-50%)", // Move o logotipo para o centro exato
           zIndex: 1000, // Alta prioridade para ficar acima de outros elementos
         }}
       >
         <Image
-          src="/logo_invictus.png" // Caminho para o logotipo
+          src="/logo_invictus.png"
           alt="Logotipo Invictus"
-          width={580}
-          height={400}
+          width={72 * rem}
+          height={50 * rem}
         />
       </div>
-      <div
+      <div // Borda superior
         style={{
           position: "absolute",
           top: 0,
-          left: -20,
-          width: "79.4%", // A borda superior se estende por 60% da largura
-          height: "4px", // A altura da borda superior
-          backgroundColor: "white", // Cor da borda superior
+          left: -10,
+          width: "80%",
+          height: "1px",
+          backgroundColor: "white",
         }}
       />
-      <div
+      <div // Borda esquerda
         style={{
           position: "absolute",
-          top: -20,
+          top: -10,
           left: 0,
-          width: "4px", // A largura da borda esquerda
-          height: "86%", // A borda esquerda se estende por 80% da altura
-          backgroundColor: "white", // Cor da borda esquerda
+          width: "1px",
+          height: "87%",
+          backgroundColor: "white",
         }}
       />
-      <div
+      <div // Borda direita
         style={{
           position: "absolute",
-          bottom: -20,
+          bottom: -10,
           right: 0,
-          width: "4px", // A largura da borda esquerda
-          height: "86%", // A borda esquerda se estende por 80% da altura
-          backgroundColor: "white", // Cor da borda esquerda
+          width: "1px",
+          height: "86%",
+          backgroundColor: "white",
         }}
       />
-      <div
+      <div // Borda inferior
         style={{
           position: "absolute",
           bottom: 0,
-          right: -20,
-          width: "79.4%", // A borda superior se estende por 60% da largura
-          height: "4px", // A altura da borda superior
-          backgroundColor: "white", // Cor da borda superior
+          right: -10,
+          width: "81%",
+          height: "1px",
+          backgroundColor: "white",
         }}
       />
       {/* Imagem no canto superior direito */}
       <div
         style={{
           position: "absolute",
-          top: -60,
-          right: -52,
+          top: -20,
+          right: -20,
           zIndex: 9999,
           backgroundColor: "#FFF", // Alta prioridade para sobrepor tudo, inclusive a borda
         }}
       >
         <Image
-          src="/borda_superior_direito.png" // Substitua com o caminho do seu png
+          src="/borda_superior_direito.png"
           alt="Desenho moldura superior"
-          width={500}
-          height={500}
+          width={166}
+          height={168}
         />
       </div>
 
       <div
         style={{
           position: "absolute", // Desenho no canto inferior esquerdo
-          bottom: -62,
-          left: -60,
+          bottom: -20,
+          left: -20,
           zIndex: 9999,
           backgroundColor: "#FFF", // Alta prioridade para sobrepor tudo, inclusive a borda
         }}
       >
         <Image
-          src="/borda_inferior_esquerda.png" // Substitua com o caminho do seu png
+          src="/borda_inferior_esquerda.png"
           alt="Desenho moldura inferior"
-          width={500}
-          height={500}
+          width={154}
+          height={154}
         />
       </div>
 
       <div
         style={{
           position: "absolute", // Desenho no canto inferior direito
-          bottom: 60,
-          right: 100,
+          bottom: 20,
+          right: 20,
           zIndex: 9999, // Alta prioridade para sobrepor tudo, inclusive a borda
         }}
       >
         <Image
           src="/logo-psr-tech-light-transp.png" // Substitua com o caminho do seu png
           alt="Logo PSR"
-          width={358}
-          height={93}
+          width={120}
+          height={31}
         />
       </div>
 
@@ -184,12 +196,12 @@ export function ChartsInvictus() {
         <div
           style={{
             width: "100%",
-            height: "500px",
+            height: "160px",
             alignContent: "end",
-            fontSize: "96px",
+            fontSize: fontSizeXl,
             fontWeight: "bold",
             color: "#CACACA",
-            marginTop: "160px",
+            marginTop: `${20 * rem}px`,
             lineHeight: "0.96",
           }}
         >
@@ -199,13 +211,12 @@ export function ChartsInvictus() {
           style={{
             display: "flex",
             width: "100%",
-            height: "160px",
             alignContent: "center",
             justifyContent: "center",
             color: "#CACAFF",
-            fontSize: "48px",
+            fontSize: fontSizeLg,
             fontWeight: "bold",
-            marginTop: "16px",
+            marginTop: "4px",
           }}
         >
           AGOSTO 2024
@@ -213,11 +224,12 @@ export function ChartsInvictus() {
         <div
           style={{
             display: "flex",
+            height: "360px",
           }}
         >
           <div
             style={{
-              width: "900px",
+              width: "280px",
             }}
           >
             <div
@@ -226,13 +238,14 @@ export function ChartsInvictus() {
                 justifyContent: "center",
                 alignItems: "center",
                 gap: "10px",
-                height: "1100px",
+                height: "320px",
                 // backgroundColor: "#FFF",
+                marginLeft: "30px",
               }}
             >
               <div
                 style={{
-                  height: "400px",
+                  // height: "220px",
                   justifyContent: "center",
                   alignContent: "center",
                 }}
@@ -240,28 +253,28 @@ export function ChartsInvictus() {
                 <Image
                   src="/icone_mao_dinheiro.png"
                   alt="Icone Invest"
-                  width={240}
-                  height={200}
+                  width={30 * rem}
+                  height={25 * rem}
                 />
               </div>
               <div
                 style={{
                   display: "flex",
-                  height: "400px",
+                  // height: `${50 * rem}px`,
                   flexDirection: "column",
                   justifyContent: "center",
                 }}
               >
                 <span
                   style={{
-                    fontSize: "40px",
+                    fontSize: fontSizeMd,
                   }}
                 >
                   CUSTÓDIA TOTAL
                 </span>
                 <span
                   style={{
-                    fontSize: "64px",
+                    fontSize: fontSizeLg,
                     fontWeight: "bold",
                   }}
                 >
@@ -274,8 +287,8 @@ export function ChartsInvictus() {
             style={{
               alignContent: "center",
               overflow: "hidden",
-              width: "1620px",
-              height: "1100px",
+              width: `${heightPage / 2.5}px`,
+              height: `400px`,
             }}
           >
             <MemoizedDoughnutChart posicao={posicao} />
@@ -285,8 +298,8 @@ export function ChartsInvictus() {
         <div
           style={{
             width: "100%",
-            height: "1820px",
-            padding: "0 4rem",
+            height: `${heightPage / 2}px`,
+            padding: "0 2rem",
             overflow: "hidden",
           }}
         >
@@ -295,7 +308,7 @@ export function ChartsInvictus() {
               display: "flex",
               justifyContent: "space-between", // Centraliza o conteúdo horizontalmente
               alignItems: "baseline",
-              margin: "0 50px 20px 50px",
+              margin: "0px 50px 10px 20px",
             }}
           >
             {/* Logo à esquerda */}
@@ -304,17 +317,16 @@ export function ChartsInvictus() {
               <Image
                 src="/logo_xp.png"
                 alt="Logo XP"
-                width={220}
-                height={220}
+                width={22 * rem}
+                height={22 * rem}
               />
             </div>
 
             <span
               style={{
-                fontSize: "64px",
+                fontSize: fontSizeLg,
                 fontWeight: "bold",
                 color: "#BABABA",
-                padding: "0 300px 10px 0",
               }}
             >
               DEMONSTRATIVO
@@ -327,15 +339,15 @@ export function ChartsInvictus() {
               display: "flex",
               flexDirection: "column",
               fontFamily: "Poppins, sans-serif",
-              height: "1600px",
-              fontSize: "40px",
-              margin: "0px 60px 4px 120px",
+              height: `${heightPage / 2}px`,
+              fontSize: fontSizeMd,
+              marginLeft: "6rem",
             }}
           >
             <div
               style={{
                 display: "flex",
-                fontSize: "46px",
+                fontSize: fontSizeMd,
                 textAlign: "left",
                 fontWeight: "bold",
               }}
