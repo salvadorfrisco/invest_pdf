@@ -5,46 +5,25 @@ import { ChartsInvictus } from "../components/charts_invictus";
 import { getPosicaoData } from "../useCases/fetchPosicaoUseCase";
 
 const personalizacaoBase = {
-  // Baixar/Salvar = save / Abrir no navegador = open
-  // method: "open",
   method: "save",
-  resolution: 4,
+  resolution: 3, // 0: menor > 10: maior
   page: {
-    // Definir a margem: NONE, SMALL, MEDIUM, etc...
     margin: Margin.NONE,
-    // Formato da página: A4 ou letter
     format: "A4",
-    // Orientação do arquivo: portrait ou landscape
     orientation: "portrait",
   },
   overrides: {
-    // see https://artskydj.github.io/jsPDF/docs/jsPDF.html for more options
-    pdf: {
-      compress: true,
-    },
-    // see https://html2canvas.hertzen.com/configuration for more options
-    canvas: {
-      useCORS: true,
-    },
+    pdf: { compress: true },
+    canvas: { useCORS: true },
   },
 };
 
 const recuperarConteudoParaPDF = () => document.getElementById("conteudo");
 
-const factor = 3;
-const widthPage = 2480 / factor;
-const heightPage = 3506 / factor;
-const fontSizeXl = 80 / factor;
-const fontSizeLg = 60 / factor;
-const fontSizeMd = 40 / factor;
-const fontSizeSm = 30 / factor;
-const fontSizeXs = 20 / factor;
-const rem = 8 / factor;
-
 export default function Home() {
   const [posicao, setPosicao] = useState([]);
-  const [competencia, setCompetencia] = useState("Todas");
-  const [clientId, setClientId] = useState("Todos");
+  const [competencia, setCompetencia] = useState("");
+  const [clientId, setClientId] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -55,31 +34,40 @@ export default function Home() {
         console.error("Erro ao carregar posicao:", error);
       }
     }
-
     fetchData();
   }, []);
 
-  // Extrair opções únicas de `competencia` e `client_id` para os campos de seleção
+  // Extrair opções únicas de `competencia`
   const competenciasUnicas = useMemo(() => {
     const competencias = posicao.map((item) => item.competencia);
-    return ["todas", ...new Set(competencias)];
+    return ["", ...new Set(competencias)];
   }, [posicao]);
 
-  const clientIdsUnicos = useMemo(() => {
-    const clientIds = posicao.map((item) => item.client_id);
-    return ["todos", ...new Set(clientIds)];
-  }, [posicao]);
+  // Filtrar os `client_id` com base na `competencia` selecionada
+  const clientIdsFiltrados = useMemo(() => {
+    if (!competencia) return [];
+    const clientIds = posicao
+      .filter((item) => item.competencia === competencia)
+      .map((item) => item.client_id);
+    return ["", ...new Set(clientIds)];
+  }, [posicao, competencia]);
+
+  const formattedCompetencia = (competencia) => {
+    if (!competencia) return "";
+
+    const [year, month] = competencia.split("-");
+    const date = new Date(year, month - 1); // Cria uma data com o mês correto
+
+    const formattedMonth = date.toLocaleString("pt-BR", { month: "long" }); // Nome do mês
+    return `${formattedMonth.toUpperCase()}/${year}`;
+  };
 
   const gerarPDF = () => {
-    // Gera o nome do arquivo PDF
-    const nomePDF = `Invictus_${competencia}_${clientId}.pdf`;
-
-    // Clona a personalização base e adiciona o nome do arquivo PDF
+    const nomePDF = `Invictus-${competencia}-${clientId}.pdf`;
     const personalizacao = {
       ...personalizacaoBase,
       filename: nomePDF,
     };
-
     generatePDF(recuperarConteudoParaPDF, personalizacao);
   };
 
@@ -93,15 +81,14 @@ export default function Home() {
       </Head>
       <main
         style={{
-          display: "flex", // Adiciona flexbox
-          justifyContent: "center", // Centraliza horizontalmente
-          alignItems: "center", // Centraliza verticalmente (caso necessário)
-          flexDirection: "column", // Garante que o conteúdo será empilhado verticalmente
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
           textAlign: "center",
-          fontSize: `${fontSizeLg}px`,
-          width: "100vw", // Define o tamanho para a largura total da tela
-          minHeight: "100vh", // Garante que ocupe toda a altura da tela
-          padding: "0 20px", // Adiciona um padding ao redor do conteúdo
+          fontSize: "20px",
+          width: "100vw",
+          minHeight: "100vh",
         }}
       >
         <div
@@ -109,7 +96,7 @@ export default function Home() {
             display: "flex",
             justifyContent: "space-around",
             alignItems: "center",
-            padding: "24px",
+            padding: "16px",
             gap: "32px",
           }}
         >
@@ -125,15 +112,15 @@ export default function Home() {
               value={competencia}
               onChange={(e) => setCompetencia(e.target.value)}
               style={{
+                fontSize: "16px",
                 backgroundColor: "#777",
-                border: "1px solid #FFF",
                 borderRadius: "8px",
                 padding: "2px 8px",
               }}
             >
               {competenciasUnicas.map((competencia) => (
                 <option key={competencia} value={competencia}>
-                  {competencia}
+                  {formattedCompetencia(competencia)}
                 </option>
               ))}
             </select>
@@ -150,38 +137,25 @@ export default function Home() {
               id="clientIdFilter"
               value={clientId}
               onChange={(e) => setClientId(e.target.value)}
+              disabled={!competencia || clientIdsFiltrados.length <= 1}
               style={{
+                fontSize: "16px",
                 backgroundColor: "#777",
-                border: "1px solid #FFF",
                 borderRadius: "8px",
                 padding: "2px 8px",
               }}
             >
-              {clientIdsUnicos.map((clientId) => (
+              {clientIdsFiltrados.map((clientId) => (
                 <option key={clientId} value={clientId}>
                   {clientId}
                 </option>
               ))}
             </select>
           </div>
-          <div
-            style={{
-              paddingLeft: "24px",
-            }}
-          >
-            <button
-              onClick={gerarPDF}
-              // onClick={() =>
-              //   generatePDF(recuperarConteudoParaPDF, personalizacao)
-              // }
-              style={{
-                backgroundColor: "#77A",
-                border: "2px solid #FFF",
-                borderRadius: "24px",
-                padding: "4px 24px",
-              }}
-            >
-              Gerar PDF
+
+          <div style={{ paddingLeft: "24px" }}>
+            <button className="btn-pdf" onClick={gerarPDF}>
+              PDF
             </button>
           </div>
         </div>
@@ -189,20 +163,13 @@ export default function Home() {
         <div
           id="conteudo"
           style={{
-            width: `${widthPage}px`,
-            height: `${heightPage}px`,
-            padding: `${8 * rem}px ${7 * rem}px`, // "60px 52px",
+            width: "826px",
+            height: "1168px",
+            padding: "20px 20px",
             backgroundColor: "#111E25",
           }}
         >
           <ChartsInvictus competencia={competencia} clientId={clientId} />
-          {/* <div
-            style={{
-              height: "126px",
-              width: "2480px",
-            }}
-          ></div>
-          <ChartsInvictus /> */}
         </div>
       </main>
     </>

@@ -4,21 +4,9 @@ import DoughnutChart from "./components/DoughnutChart";
 import { useMemo, useState, useEffect } from "react";
 import React from "react";
 import { getPosicaoData } from "../../useCases/fetchPosicaoUseCase";
-import Image from "next/image"; // Import the Image component
+import Image from "next/image";
 
 const MemoizedDoughnutChart = React.memo(DoughnutChart);
-
-const factor = 3;
-const widthPage = 2480 / factor;
-const heightPage = 3506 / factor;
-const fontSizeXl = 80 / factor;
-const fontSizeLg = 60 / factor;
-const fontSizeMd = 40 / factor;
-const fontSizeSm = 30 / factor;
-const fontSizeXs = 20 / factor;
-const rem = 8 / factor;
-const borderWidth = 1;
-const borderHeight = rem / 4 / factor;
 
 export function ChartsInvictus({ competencia, clientId }) {
   const [posicao, setPosicao] = useState([]);
@@ -36,10 +24,6 @@ export function ChartsInvictus({ competencia, clientId }) {
     fetchData();
   }, []);
 
-  // console.log(posicao);
-  // console.log(competencia);
-  // console.log(clientId);
-
   const totalCustodia = useMemo(() => {
     return posicao
       .filter(
@@ -55,6 +39,14 @@ export function ChartsInvictus({ competencia, clientId }) {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}`;
+
+  const formattedCompetencia = useMemo(() => {
+    const [year, month] = competencia.split("-");
+    const date = new Date(year, month - 1); // Cria uma data com o mês correto
+
+    const formattedMonth = date.toLocaleString("pt-BR", { month: "long" }); // Nome do mês
+    return `${formattedMonth.toUpperCase()} / ${year}`;
+  }, [competencia]);
 
   const posicaoFiltrada = useMemo(() => {
     return posicao.filter(
@@ -92,10 +84,10 @@ export function ChartsInvictus({ competencia, clientId }) {
     <div
       style={{
         display: "flex",
-        height: `${heightPage - 16 * rem}px`, // "3380px",
+        height: "1128px",
         flexDirection: "column",
-        position: "relative", // Para permitir a posição dos desenhos nos cantos
-        zIndex: 1, // Garante que a borda tenha menor prioridade que a imagem
+        position: "relative",
+        zIndex: 1,
       }}
     >
       {/* Logotipo */}
@@ -104,16 +96,17 @@ export function ChartsInvictus({ competencia, clientId }) {
           position: "absolute",
           backgroundColor: "#FFF",
           top: "24px",
-          left: "50%", // Centraliza horizontalmente
-          transform: "translateX(-50%)", // Move o logotipo para o centro exato
-          zIndex: 1000, // Alta prioridade para ficar acima de outros elementos
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 1000,
+          backgroundColor: "#000",
         }}
       >
         <Image
           src="/logo_invictus.png"
           alt="Logotipo Invictus"
-          width={72 * rem}
-          height={50 * rem}
+          width={222}
+          height={136}
         />
       </div>
       <div // Borda superior
@@ -163,28 +156,28 @@ export function ChartsInvictus({ competencia, clientId }) {
           top: -20,
           right: -20,
           zIndex: 9999,
-          backgroundColor: "#FFF", // Alta prioridade para sobrepor tudo, inclusive a borda
+          backgroundColor: "#000",
         }}
       >
         <Image
-          src="/borda_superior_direito.png"
+          src="/borda_superior_direito.jpg"
           alt="Desenho moldura superior"
           width={166}
-          height={168}
+          height={166}
         />
       </div>
 
       <div
         style={{
-          position: "absolute", // Desenho no canto inferior esquerdo
+          position: "absolute",
           bottom: -20,
           left: -20,
           zIndex: 9999,
-          backgroundColor: "#FFF", // Alta prioridade para sobrepor tudo, inclusive a borda
+          backgroundColor: "#000",
         }}
       >
         <Image
-          src="/borda_inferior_esquerda.png"
+          src="/borda_inferior_esquerda.jpg"
           alt="Desenho moldura inferior"
           width={154}
           height={154}
@@ -193,14 +186,14 @@ export function ChartsInvictus({ competencia, clientId }) {
 
       <div
         style={{
-          position: "absolute", // Desenho no canto inferior direito
+          position: "absolute",
           bottom: 20,
           right: 20,
-          zIndex: 9999, // Alta prioridade para sobrepor tudo, inclusive a borda
+          zIndex: 9999,
         }}
       >
         <Image
-          src="/logo-psr-tech-light-transp.png" // Substitua com o caminho do seu png
+          src="/logo-psr-tech-light-transp.png"
           alt="Logo PSR"
           width={120}
           height={31}
@@ -213,10 +206,10 @@ export function ChartsInvictus({ competencia, clientId }) {
             width: "100%",
             height: "160px",
             alignContent: "end",
-            fontSize: fontSizeXl,
+            fontSize: "26px",
             fontWeight: "bold",
             color: "#CACACA",
-            marginTop: `${20 * rem}px`,
+            marginTop: "54px",
             lineHeight: "0.96",
           }}
         >
@@ -229,22 +222,22 @@ export function ChartsInvictus({ competencia, clientId }) {
             alignContent: "center",
             justifyContent: "center",
             color: "#CACAFF",
-            fontSize: fontSizeLg,
+            fontSize: "20px",
             fontWeight: "bold",
             marginTop: "4px",
           }}
         >
-          AGOSTO 2024
+          {formattedCompetencia}
         </div>
         <div
           style={{
             display: "flex",
-            height: "360px",
+            height: "340px",
           }}
         >
           <div
             style={{
-              width: "280px",
+              width: "360",
             }}
           >
             <div
@@ -254,13 +247,11 @@ export function ChartsInvictus({ competencia, clientId }) {
                 alignItems: "center",
                 gap: "10px",
                 height: "320px",
-                // backgroundColor: "#FFF",
-                marginLeft: "30px",
+                marginLeft: "32px",
               }}
             >
               <div
                 style={{
-                  // height: "220px",
                   justifyContent: "center",
                   alignContent: "center",
                 }}
@@ -268,28 +259,27 @@ export function ChartsInvictus({ competencia, clientId }) {
                 <Image
                   src="/icone_mao_dinheiro.png"
                   alt="Icone Invest"
-                  width={30 * rem}
-                  height={25 * rem}
+                  width={100}
+                  height={100}
                 />
               </div>
               <div
                 style={{
                   display: "flex",
-                  // height: `${50 * rem}px`,
                   flexDirection: "column",
                   justifyContent: "center",
                 }}
               >
                 <span
                   style={{
-                    fontSize: fontSizeMd,
+                    fontSize: "16px",
                   }}
                 >
                   CUSTÓDIA TOTAL
                 </span>
                 <span
                   style={{
-                    fontSize: fontSizeLg,
+                    fontSize: "20px",
                     fontWeight: "bold",
                   }}
                 >
@@ -300,10 +290,10 @@ export function ChartsInvictus({ competencia, clientId }) {
           </div>
           <div
             style={{
-              alignContent: "center",
+              alignContent: "end",
               overflow: "hidden",
               width: `560px`,
-              height: `400px`,
+              height: `340px`,
             }}
           >
             <MemoizedDoughnutChart posicao={posicaoFiltrada} />
@@ -313,7 +303,6 @@ export function ChartsInvictus({ competencia, clientId }) {
         <div
           style={{
             width: "100%",
-            height: `${heightPage / 2}px`,
             padding: "0 2rem",
             overflow: "hidden",
           }}
@@ -321,20 +310,18 @@ export function ChartsInvictus({ competencia, clientId }) {
           <div
             style={{
               display: "flex",
-              justifyContent: "space-between", // Centraliza o conteúdo horizontalmente
-              alignItems: "baseline",
-              margin: "0px 50px 10px 20px",
+              justifyContent: "space-between",
+              alignItems: "end",
+              margin: "0px 70px 10px 20px",
             }}
           >
-            {/* Logo à esquerda */}
             <div style={{ marginLeft: "80px" }}>
-              {/* Empurra o logo à esquerda */}
               <Image src="/logo_xp.png" alt="Logo XP" width={90} height={90} />
             </div>
 
             <span
               style={{
-                fontSize: fontSizeLg,
+                fontSize: "24px",
                 fontWeight: "bold",
                 color: "#BABABA",
               }}
@@ -349,15 +336,13 @@ export function ChartsInvictus({ competencia, clientId }) {
               display: "flex",
               flexDirection: "column",
               fontFamily: "Poppins, sans-serif",
-              // height: `${heightPage / 2}px`,
-              fontSize: fontSizeMd,
+              fontSize: "16px",
               marginLeft: "6rem",
             }}
           >
             <div
               style={{
                 display: "flex",
-                fontSize: fontSizeMd,
                 textAlign: "left",
                 fontWeight: "bold",
               }}
@@ -365,7 +350,6 @@ export function ChartsInvictus({ competencia, clientId }) {
               <div style={{ flex: 2, padding: "8px" }}>PRODUTO</div>
               <div style={{ flex: 1, padding: "8px" }}>QUANTIDADE</div>
               <div style={{ flex: 1, padding: "8px" }}>VALOR</div>
-              {/* <div style={{ flex: 1, padding: "8px" }}>COMPETÊNCIA</div> */}
               <div style={{ flex: 1, padding: "8px" }}>ATIVO</div>
             </div>
             {posicao
@@ -401,7 +385,6 @@ export function ChartsInvictus({ competencia, clientId }) {
                           currency: "BRL",
                         })}
                       </div>
-                      {/* <div style={{ flex: 1, padding: "8px" }}>{item.competencia}</div> */}
                       <div style={{ flex: 1, padding: "8px" }}>
                         {item.strategy}
                       </div>

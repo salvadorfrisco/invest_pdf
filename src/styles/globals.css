@@ -59,3 +59,14 @@ body {
   margin-top: 40px;
   z-index: 9999; /* Certifique-se de que este valor seja maior que os outros */
 }
+
+.btn-pdf {
+  background-color: #77a;
+  border-radius: 24px;
+  padding: 4px 24px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-pdf:hover {
+  background-color: #99c;
+}
