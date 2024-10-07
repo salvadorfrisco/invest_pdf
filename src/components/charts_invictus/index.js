@@ -20,7 +20,7 @@ const rem = 8 / factor;
 const borderWidth = 1;
 const borderHeight = rem / 4 / factor;
 
-export function ChartsInvictus() {
+export function ChartsInvictus({ competencia, clientId }) {
   const [posicao, setPosicao] = useState([]);
 
   useEffect(() => {
@@ -36,18 +36,33 @@ export function ChartsInvictus() {
     fetchData();
   }, []);
 
+  // console.log(posicao);
+  // console.log(competencia);
+  // console.log(clientId);
+
   const totalCustodia = useMemo(() => {
-    return posicao.reduce(
-      (total, item) => total + (item.closing_value || 0),
-      0
-    );
-  }, [posicao]);
+    return posicao
+      .filter(
+        (item) =>
+          (competencia === "todas" || item.competencia === competencia) &&
+          (clientId === "todos" || item.client_id === clientId)
+      )
+      .reduce((total, item) => total + (item.closing_value || 0), 0);
+  }, [clientId, competencia, posicao]);
 
   const formattedTotalCustodia = `$${totalCustodia.toLocaleString("en-US", {
     style: "decimal",
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}`;
+
+  const posicaoFiltrada = useMemo(() => {
+    return posicao.filter(
+      (item) =>
+        (competencia === "todas" || item.competencia === competencia) &&
+        (clientId === "todos" || item.client_id === clientId)
+    );
+  }, [clientId, competencia, posicao]);
 
   const posicaoAgrupada = useMemo(() => {
     return posicao.reduce((acc, item) => {
@@ -287,11 +302,11 @@ export function ChartsInvictus() {
             style={{
               alignContent: "center",
               overflow: "hidden",
-              width: `${heightPage / 2.5}px`,
+              width: `560px`,
               height: `400px`,
             }}
           >
-            <MemoizedDoughnutChart posicao={posicao} />
+            <MemoizedDoughnutChart posicao={posicaoFiltrada} />
           </div>
         </div>
 
@@ -314,12 +329,7 @@ export function ChartsInvictus() {
             {/* Logo à esquerda */}
             <div style={{ marginLeft: "80px" }}>
               {/* Empurra o logo à esquerda */}
-              <Image
-                src="/logo_xp.png"
-                alt="Logo XP"
-                width={22 * rem}
-                height={22 * rem}
-              />
+              <Image src="/logo_xp.png" alt="Logo XP" width={90} height={90} />
             </div>
 
             <span
@@ -339,7 +349,7 @@ export function ChartsInvictus() {
               display: "flex",
               flexDirection: "column",
               fontFamily: "Poppins, sans-serif",
-              height: `${heightPage / 2}px`,
+              // height: `${heightPage / 2}px`,
               fontSize: fontSizeMd,
               marginLeft: "6rem",
             }}
@@ -358,34 +368,47 @@ export function ChartsInvictus() {
               {/* <div style={{ flex: 1, padding: "8px" }}>COMPETÊNCIA</div> */}
               <div style={{ flex: 1, padding: "8px" }}>ATIVO</div>
             </div>
-            {posicao.map((item, index) => {
-              return (
-                index < 9 && <div className="page-break" /> && (
-                  <div
-                    key={index}
-                    style={{ display: "flex", textAlign: "left" }}
-                  >
-                    <div style={{ flex: 2, padding: "8px" }}>{item.asset}</div>
-                    <div style={{ flex: 1, padding: "8px" }}>
-                      {item.closing_quantity.toLocaleString("pt-BR", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+            {posicao
+              .filter(
+                (item) =>
+                  (competencia === "todas" ||
+                    item.competencia === competencia) &&
+                  (clientId === "todos" || item.client_id === clientId)
+              )
+              .map((item, index) => {
+                return (
+                  index < 11 && <div className="page-break" /> && (
+                    <div
+                      key={index}
+                      style={{
+                        display: "flex",
+                        textAlign: "left",
+                        lineHeight: "0.8",
+                      }}
+                    >
+                      <div style={{ flex: 2, padding: "8px" }}>
+                        {item.asset}
+                      </div>
+                      <div style={{ flex: 1, padding: "8px" }}>
+                        {item.closing_quantity.toLocaleString("pt-BR", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </div>
+                      <div style={{ flex: 1, padding: "8px" }}>
+                        {item.closing_value.toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        })}
+                      </div>
+                      {/* <div style={{ flex: 1, padding: "8px" }}>{item.competencia}</div> */}
+                      <div style={{ flex: 1, padding: "8px" }}>
+                        {item.strategy}
+                      </div>
                     </div>
-                    <div style={{ flex: 1, padding: "8px" }}>
-                      {item.closing_value.toLocaleString("pt-BR", {
-                        style: "currency",
-                        currency: "BRL",
-                      })}
-                    </div>
-                    {/* <div style={{ flex: 1, padding: "8px" }}>{item.competencia}</div> */}
-                    <div style={{ flex: 1, padding: "8px" }}>
-                      {item.strategy}
-                    </div>
-                  </div>
-                )
-              );
-            })}
+                  )
+                );
+              })}
           </div>
         </div>
       </div>

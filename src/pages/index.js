@@ -1,10 +1,14 @@
+import { useMemo, useState, useEffect } from "react";
 import Head from "next/head";
 import generatePDF, { Margin } from "react-to-pdf";
 import { ChartsInvictus } from "../components/charts_invictus";
+import { getPosicaoData } from "../useCases/fetchPosicaoUseCase";
 
-const personalizacao = {
+const personalizacaoBase = {
   // Baixar/Salvar = save / Abrir no navegador = open
-  method: "open",
+  // method: "open",
+  method: "save",
+  resolution: 4,
   page: {
     // Definir a margem: NONE, SMALL, MEDIUM, etc...
     margin: Margin.NONE,
@@ -12,6 +16,16 @@ const personalizacao = {
     format: "A4",
     // Orientação do arquivo: portrait ou landscape
     orientation: "portrait",
+  },
+  overrides: {
+    // see https://artskydj.github.io/jsPDF/docs/jsPDF.html for more options
+    pdf: {
+      compress: true,
+    },
+    // see https://html2canvas.hertzen.com/configuration for more options
+    canvas: {
+      useCORS: true,
+    },
   },
 };
 
@@ -28,6 +42,47 @@ const fontSizeXs = 20 / factor;
 const rem = 8 / factor;
 
 export default function Home() {
+  const [posicao, setPosicao] = useState([]);
+  const [competencia, setCompetencia] = useState("Todas");
+  const [clientId, setClientId] = useState("Todos");
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await getPosicaoData();
+        setPosicao(data);
+      } catch (error) {
+        console.error("Erro ao carregar posicao:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  // Extrair opções únicas de `competencia` e `client_id` para os campos de seleção
+  const competenciasUnicas = useMemo(() => {
+    const competencias = posicao.map((item) => item.competencia);
+    return ["todas", ...new Set(competencias)];
+  }, [posicao]);
+
+  const clientIdsUnicos = useMemo(() => {
+    const clientIds = posicao.map((item) => item.client_id);
+    return ["todos", ...new Set(clientIds)];
+  }, [posicao]);
+
+  const gerarPDF = () => {
+    // Gera o nome do arquivo PDF
+    const nomePDF = `Invictus_${competencia}_${clientId}.pdf`;
+
+    // Clona a personalização base e adiciona o nome do arquivo PDF
+    const personalizacao = {
+      ...personalizacaoBase,
+      filename: nomePDF,
+    };
+
+    generatePDF(recuperarConteudoParaPDF, personalizacao);
+  };
+
   return (
     <>
       <Head>
@@ -38,28 +93,109 @@ export default function Home() {
       </Head>
       <main
         style={{
+          display: "flex", // Adiciona flexbox
+          justifyContent: "center", // Centraliza horizontalmente
+          alignItems: "center", // Centraliza verticalmente (caso necessário)
+          flexDirection: "column", // Garante que o conteúdo será empilhado verticalmente
           textAlign: "center",
           fontSize: `${fontSizeLg}px`,
-          width: `${widthPage}px`,
+          width: "100vw", // Define o tamanho para a largura total da tela
+          minHeight: "100vh", // Garante que ocupe toda a altura da tela
+          padding: "0 20px", // Adiciona um padding ao redor do conteúdo
         }}
       >
-        <button
-          onClick={() => generatePDF(recuperarConteudoParaPDF, personalizacao)}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+            padding: "24px",
+            gap: "32px",
+          }}
         >
-          Gerar PDF
-        </button>
+          <div>
+            <label
+              htmlFor="competenciaFilter"
+              style={{ fontSize: "18px", marginRight: "8px" }}
+            >
+              Competência:
+            </label>
+            <select
+              id="competenciaFilter"
+              value={competencia}
+              onChange={(e) => setCompetencia(e.target.value)}
+              style={{
+                backgroundColor: "#777",
+                border: "1px solid #FFF",
+                borderRadius: "8px",
+                padding: "2px 8px",
+              }}
+            >
+              {competenciasUnicas.map((competencia) => (
+                <option key={competencia} value={competencia}>
+                  {competencia}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label
+              htmlFor="clientIdFilter"
+              style={{ fontSize: "18px", marginRight: "8px" }}
+            >
+              Cliente:
+            </label>
+            <select
+              id="clientIdFilter"
+              value={clientId}
+              onChange={(e) => setClientId(e.target.value)}
+              style={{
+                backgroundColor: "#777",
+                border: "1px solid #FFF",
+                borderRadius: "8px",
+                padding: "2px 8px",
+              }}
+            >
+              {clientIdsUnicos.map((clientId) => (
+                <option key={clientId} value={clientId}>
+                  {clientId}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div
+            style={{
+              paddingLeft: "24px",
+            }}
+          >
+            <button
+              onClick={gerarPDF}
+              // onClick={() =>
+              //   generatePDF(recuperarConteudoParaPDF, personalizacao)
+              // }
+              style={{
+                backgroundColor: "#77A",
+                border: "2px solid #FFF",
+                borderRadius: "24px",
+                padding: "4px 24px",
+              }}
+            >
+              Gerar PDF
+            </button>
+          </div>
+        </div>
 
         <div
           id="conteudo"
           style={{
             width: `${widthPage}px`,
             height: `${heightPage}px`,
-            // height: "7008px",
             padding: `${8 * rem}px ${7 * rem}px`, // "60px 52px",
             backgroundColor: "#111E25",
           }}
         >
-          <ChartsInvictus />
+          <ChartsInvictus competencia={competencia} clientId={clientId} />
           {/* <div
             style={{
               height: "126px",
