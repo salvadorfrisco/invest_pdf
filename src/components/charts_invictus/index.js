@@ -10,6 +10,52 @@ const MemoizedDoughnutChart = React.memo(DoughnutChart);
 
 export function ChartsInvictus({ competencia, clientId }) {
   const [posicao, setPosicao] = useState([]);
+  const [textValue, setTextValue] = useState(
+    "Diante do cenário econômico, um rendimento de 115% do CDI reflete...."
+  );
+  const [isTextareaVisible, setIsTextareaVisible] = useState(true);
+  const [isEditable, setIsEditable] = useState(true);
+
+  const [inputStyle, setInputStyle] = useState({
+    width: "400px",
+    backgroundColor: "#3A4E45", // Cor inicial do fundo
+    border: "1px solid white", // Cor inicial da borda
+    color: "white", // Cor do texto
+    resize: "none",
+    fontSize: "16px",
+    showIcon: true,
+  });
+
+  console.log("isTextareaVisible", isTextareaVisible);
+  console.log("inputStyle.showIcon", inputStyle.showIcon);
+
+  const resetInputStyle = () => {
+    setInputStyle((prevStyle) => ({
+      ...prevStyle,
+      backgroundColor: "#3A4E45", // Novo fundo quando em foco
+      border: "1px solid white", // Borda alterada quando em foco
+      color: "white", // Cor do texto alterada
+      fontSize: "16px",
+      showIcon: true,
+    }));
+    setIsTextareaVisible(true);
+  };
+
+  const toggleInputStyle = () => {
+    setIsTextareaVisible(!isTextareaVisible);
+
+    setInputStyle((prevStyle) => ({
+      ...prevStyle,
+      backgroundColor: "#111E25",
+      border: "none",
+      fontSize: "16px",
+      showIcon: !prevStyle.showIcon,
+    }));
+  };
+
+  const handleTextChange = (e) => {
+    setTextValue(e.target.value); // Atualiza o valor do textarea conforme o usuário digita
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -56,29 +102,28 @@ export function ChartsInvictus({ competencia, clientId }) {
     );
   }, [clientId, competencia, posicao]);
 
-  const posicaoAgrupada = useMemo(() => {
-    return posicao.reduce((acc, item) => {
-      const strategy = item.strategy;
+  const handleInput = (e) => {
+    const textarea = e.target;
+    const maxLines = 3;
+    const maxCharsPerLine = 100;
+    const lines = textarea.value.split("\n");
 
-      if (!acc[strategy]) {
-        acc[strategy] = {
-          produto: item.produto,
-          asset: item.asset,
-          closing_quantity: 0,
-          closing_value: 0,
-          competencia: item.competencia,
-          strategy: item.strategy,
-        };
-      }
+    // Limitar número de caracteres por linha
+    const truncatedLines = lines.map((line) => {
+      return line.length > maxCharsPerLine
+        ? line.slice(0, maxCharsPerLine)
+        : line;
+    });
 
-      acc[strategy].closing_quantity += item.closing_quantity || 0;
-      acc[strategy].closing_value += item.closing_value || 0;
+    // Limitar o número de linhas para no máximo 3
+    if (truncatedLines.length > maxLines) {
+      truncatedLines.splice(maxLines);
+    }
 
-      return acc;
-    }, {});
-  }, [posicao]);
-
-  const posicaoAgrupadaArray = Object.values(posicaoAgrupada);
+    const finalValue = truncatedLines.join("\n");
+    setTextValue(finalValue);
+    textarea.value = finalValue; // Atualiza o valor do textarea
+  };
 
   return (
     <div
@@ -182,6 +227,60 @@ export function ChartsInvictus({ competencia, clientId }) {
           width={154}
           height={154}
         />
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: 30,
+          left: 200,
+          zIndex: 9999,
+          backgroundColor: "#111E25",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        {isTextareaVisible ? (
+          <textarea
+            id="textInput"
+            className="custom-input"
+            placeholder="Digite algo"
+            onInput={handleInput}
+            onFocus={resetInputStyle}
+            rows={3}
+            style={inputStyle}
+            value={textValue} // Vincula o valor do textarea ao estado
+            onChange={handleTextChange} // Atualiza o estado ao digitar
+          />
+        ) : (
+          <div
+            style={{
+              whiteSpace: "pre-wrap", // Mantém as quebras de linha
+              color: "white",
+              backgroundColor: "#111E25",
+              padding: "10px",
+              fontSize: "16px",
+              border: "none",
+              width: "400px",
+            }}
+            onClick={resetInputStyle}
+          >
+            {textValue}
+          </div>
+        )}
+
+        {inputStyle.showIcon && (
+          <span
+            style={{
+              color: "green",
+              marginLeft: "10px",
+              cursor: "pointer",
+            }}
+            onClick={toggleInputStyle}
+          >
+            ✔️
+          </span>
+        )}
       </div>
 
       <div
@@ -361,7 +460,7 @@ export function ChartsInvictus({ competencia, clientId }) {
               )
               .map((item, index) => {
                 return (
-                  index < 11 && <div className="page-break" /> && (
+                  index < 8 && <div className="page-break" /> && (
                     <div
                       key={index}
                       style={{

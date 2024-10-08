@@ -3,6 +3,8 @@ import Head from "next/head";
 import generatePDF, { Margin } from "react-to-pdf";
 import { ChartsInvictus } from "../components/charts_invictus";
 import { getPosicaoData } from "../useCases/fetchPosicaoUseCase";
+// import jsPDF from "jspdf";
+// import html2canvas from "html2canvas";
 
 const personalizacaoBase = {
   method: "save",
