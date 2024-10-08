@@ -3,29 +3,28 @@ import Head from "next/head";
 import generatePDF, { Margin } from "react-to-pdf";
 import { ChartsInvictus } from "../components/charts_invictus";
 import { getPosicaoData } from "../useCases/fetchPosicaoUseCase";
-// import jsPDF from "jspdf";
-// import html2canvas from "html2canvas";
-
-const personalizacaoBase = {
-  method: "save",
-  resolution: 3, // 0: menor > 10: maior
-  page: {
-    margin: Margin.NONE,
-    format: "A4",
-    orientation: "portrait",
-  },
-  overrides: {
-    pdf: { compress: true },
-    canvas: { useCORS: true },
-  },
-};
-
-const recuperarConteudoParaPDF = () => document.getElementById("conteudo");
 
 export default function Home() {
   const [posicao, setPosicao] = useState([]);
   const [competencia, setCompetencia] = useState("");
   const [clientId, setClientId] = useState("");
+  const [isTextareaVisible, setIsTextareaVisible] = useState(true);
+
+  const personalizacaoBase = {
+    method: "save",
+    resolution: 3, // 0: menor > 10: maior
+    page: {
+      margin: Margin.NONE,
+      format: "A4",
+      orientation: "portrait",
+    },
+    overrides: {
+      pdf: { compress: true },
+      canvas: { useCORS: true },
+    },
+  };
+
+  const recuperarConteudoParaPDF = () => document.getElementById("conteudo");
 
   useEffect(() => {
     async function fetchData() {
@@ -68,54 +67,26 @@ export default function Home() {
   const gerarPDF = () => {
     const nomePDF = `Invictus-${competencia}-${clientId}.pdf`;
     const personalizacao = {
-      ...personalizacaoBase,
+      method: "save",
+      resolution: 3,
+      page: {
+        margin: Margin.NONE,
+        format: "A4",
+        orientation: "portrait",
+      },
       filename: nomePDF,
+      overrides: {
+        pdf: { compress: true },
+        canvas: { useCORS: true },
+      },
     };
     generatePDF(recuperarConteudoParaPDF, personalizacao);
   };
 
-  // trecho para chamar a api de upload e enviar por email
-  // const gerarPDF = async () => {
-  //   const nomePDF = `Invictus-${competencia}-${clientId}.pdf`;
-
-  //   try {
-  //     const conteudo = document.getElementById("conteudo");
-
-  //     // Converte o conteúdo em canvas
-  //     const canvas = await html2canvas(conteudo);
-
-  //     // Cria um PDF a partir do canvas
-  //     const pdf = new jsPDF({
-  //       orientation: "portrait",
-  //       unit: "px",
-  //       format: [canvas.width, canvas.height],
-  //     });
-
-  //     const imgData = canvas.toDataURL("image/png");
-  //     pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
-
-  //     // Converte o PDF em Blob
-  //     const pdfBlob = pdf.output("blob");
-
-  //     // Cria o FormData para enviar o arquivo
-  //     const formData = new FormData();
-  //     formData.append("pdf", pdfBlob, nomePDF);
-
-  //     // Faz a requisição para a API de upload
-  //     const response = await fetch("http://localhost:4000/upload", {
-  //       method: "POST",
-  //       body: formData,
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error("Erro ao fazer upload do arquivo.");
-  //     }
-
-  //     console.log("Arquivo PDF enviado com sucesso!");
-  //   } catch (error) {
-  //     console.error("Erro ao gerar ou enviar o PDF:", error);
-  //   }
-  // };
+  // Função que será passada ao ChartsInvictus para monitorar a visibilidade do textarea
+  const handleTextareaVisibilityChange = (isVisible) => {
+    setIsTextareaVisible(isVisible);
+  };
 
   return (
     <>
@@ -200,7 +171,15 @@ export default function Home() {
           </div>
 
           <div style={{ paddingLeft: "24px" }}>
-            <button className="btn-pdf" onClick={gerarPDF}>
+            <button
+              className={
+                isTextareaVisible || !competencia || !clientId
+                  ? "btn-pdf-disabled"
+                  : "btn-pdf"
+              }
+              onClick={gerarPDF}
+              disabled={isTextareaVisible || !competencia || !clientId} // Desabilita o botão quando o textarea está visível
+            >
               PDF
             </button>
           </div>
@@ -215,7 +194,11 @@ export default function Home() {
             backgroundColor: "#111E25",
           }}
         >
-          <ChartsInvictus competencia={competencia} clientId={clientId} />
+          <ChartsInvictus
+            competencia={competencia}
+            clientId={clientId}
+            onTextareaVisibilityChange={handleTextareaVisibilityChange} // Passa a função de monitoramento
+          />
         </div>
       </main>
     </>

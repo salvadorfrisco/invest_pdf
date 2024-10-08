@@ -8,13 +8,16 @@ import Image from "next/image";
 
 const MemoizedDoughnutChart = React.memo(DoughnutChart);
 
-export function ChartsInvictus({ competencia, clientId }) {
+export function ChartsInvictus({
+  competencia,
+  clientId,
+  onTextareaVisibilityChange,
+}) {
   const [posicao, setPosicao] = useState([]);
   const [textValue, setTextValue] = useState(
     "Diante do cenário econômico, um rendimento de 115% do CDI reflete...."
   );
   const [isTextareaVisible, setIsTextareaVisible] = useState(true);
-  const [isEditable, setIsEditable] = useState(true);
 
   const [inputStyle, setInputStyle] = useState({
     width: "400px",
@@ -26,9 +29,6 @@ export function ChartsInvictus({ competencia, clientId }) {
     showIcon: true,
   });
 
-  console.log("isTextareaVisible", isTextareaVisible);
-  console.log("inputStyle.showIcon", inputStyle.showIcon);
-
   const resetInputStyle = () => {
     setInputStyle((prevStyle) => ({
       ...prevStyle,
@@ -39,6 +39,10 @@ export function ChartsInvictus({ competencia, clientId }) {
       showIcon: true,
     }));
     setIsTextareaVisible(true);
+
+    if (onTextareaVisibilityChange) {
+      onTextareaVisibilityChange(true);
+    }
   };
 
   const toggleInputStyle = () => {
@@ -51,6 +55,10 @@ export function ChartsInvictus({ competencia, clientId }) {
       fontSize: "16px",
       showIcon: !prevStyle.showIcon,
     }));
+
+    if (onTextareaVisibilityChange) {
+      onTextareaVisibilityChange(false);
+    }
   };
 
   const handleTextChange = (e) => {
@@ -105,7 +113,7 @@ export function ChartsInvictus({ competencia, clientId }) {
   const handleInput = (e) => {
     const textarea = e.target;
     const maxLines = 3;
-    const maxCharsPerLine = 100;
+    const maxCharsPerLine = 200;
     const lines = textarea.value.split("\n");
 
     // Limitar número de caracteres por linha
@@ -275,6 +283,7 @@ export function ChartsInvictus({ competencia, clientId }) {
               color: "green",
               marginLeft: "10px",
               cursor: "pointer",
+              fontSize: "24px",
             }}
             onClick={toggleInputStyle}
           >
