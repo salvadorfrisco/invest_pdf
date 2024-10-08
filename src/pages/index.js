@@ -3,6 +3,8 @@ import Head from "next/head";
 import generatePDF, { Margin } from "react-to-pdf";
 import { ChartsInvictus } from "../components/charts_invictus";
 import { getPosicaoData } from "../useCases/fetchPosicaoUseCase";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 const personalizacaoBase = {
   method: "save",
@@ -62,13 +64,46 @@ export default function Home() {
     return `${formattedMonth.toUpperCase()}/${year}`;
   };
 
-  const gerarPDF = () => {
+  const gerarPDF = async () => {
     const nomePDF = `Invictus-${competencia}-${clientId}.pdf`;
-    const personalizacao = {
-      ...personalizacaoBase,
-      filename: nomePDF,
-    };
-    generatePDF(recuperarConteudoParaPDF, personalizacao);
+
+    try {
+      const conteudo = document.getElementById("conteudo");
+
+      // Converte o conteúdo em canvas
+      const canvas = await html2canvas(conteudo);
+
+      // Cria um PDF a partir do canvas
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "px",
+        format: [canvas.width, canvas.height],
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+      pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+
+      // Converte o PDF em Blob
+      const pdfBlob = pdf.output("blob");
+
+      // Cria o FormData para enviar o arquivo
+      const formData = new FormData();
+      formData.append("pdf", pdfBlob, nomePDF);
+
+      // Faz a requisição para a API de upload
+      const response = await fetch("http://localhost:4000/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao fazer upload do arquivo.");
+      }
+
+      console.log("Arquivo PDF enviado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao gerar ou enviar o PDF:", error);
+    }
   };
 
   return (
