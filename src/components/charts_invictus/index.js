@@ -152,7 +152,7 @@ export function ChartsInvictus({
           left: "50%",
           transform: "translateX(-50%)",
           zIndex: 1000,
-          backgroundColor: "#000",
+          backgroundColor: "#111E25",
         }}
       >
         <Image
@@ -209,7 +209,7 @@ export function ChartsInvictus({
           top: -20,
           right: -20,
           zIndex: 9999,
-          backgroundColor: "#000",
+          backgroundColor: "#111E25",
         }}
       >
         <Image
@@ -226,7 +226,7 @@ export function ChartsInvictus({
           bottom: -20,
           left: -20,
           zIndex: 9999,
-          backgroundColor: "#000",
+          backgroundColor: "#111E25",
         }}
       >
         <Image
